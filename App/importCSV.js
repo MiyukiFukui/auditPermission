@@ -1,16 +1,10 @@
 
-//importCSV
-function importCSV(){
+//import CSV
+function importCSV(LogSheet){
   var insertFolder = DriveApp.getFolderById("");
   var rootFolder = DriveApp.getRootFolder();
 
-  var today = new Date();
-  today = Utilities.formatDate(today, "JST", "yyyy/MM/dd");
-
-  var ss = SpreadsheetApp.create('importSprad:' + today);
-  var sh = ss.getSheets()[0];
-  var ssId = ss.getId();
-  var ssFile = DriveApp.getFileById(ssId);
+  LogSheet.insertSheet("importCSV");
 
   var csvUrl = "";
   var csvId = getFileIdFromURL(csvUrl);
@@ -19,15 +13,16 @@ function importCSV(){
   var data = file.getBlob().getDataAsString("Shift_JIS");
   var csv = Utilities.parseCsv(data);
 
-  sh.getRange(1, 1, csv.length, csv[0].length).setValues(csv);
+  //writeSpreadSheet
+  LogSheet.writeSheet("importCSV", csv);
 
   //insertFolder and delete MyDrive
-  insertFolder.addFile(ssFile);
-  rootFolder.removeFile(ssFile);
+  insertFolder.addFile(LogSheet.id);
+  rootFolder.removeFile(LogSheet.id);
 
+  return csv;
 }
 
-// functions
 function getFileIdFromURL(_url_) {
   try {
     var url = new String(_url_);
@@ -37,8 +32,6 @@ function getFileIdFromURL(_url_) {
       var ary = url.match("(folders/|/e/|/d/|=)[^/][^/]+")[0].match("(/|=)[^/][^/]+")[0].match("[^/=]+")[0];
       if(ary){
         return ary;
-        //var ret = ary[0].match("(folders/|/|=)[^/=]+");
-        //if(ret[0]=='folders'){ return ret[0].match("[^/=]+"); } else { return ret[0].match("[^/=]+"); };
       } else {
         return  "ERROR";
       }
