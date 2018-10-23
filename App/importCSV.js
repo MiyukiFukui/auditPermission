@@ -1,28 +1,42 @@
 
-//import CSV
-function importCSV(LogSheet){
-  var insertFolder = DriveApp.getFolderById("");
-  var rootFolder = DriveApp.getRootFolder();
+//出力したCSVを読み込んでスプレッドシートに出力する
+function importCSV(){
 
-  LogSheet.insertSheet("importCSV");
+  var logSheet = new LogSheet();
+  var setting = new SettingSheet()
+  var timer = new Timer();
+  var properties = new Property();
 
-  var csvUrl = "";
-  var csvId = getFileIdFromURL(csvUrl);
+  //CSVのURLからファイル情報を読み込み、変換
+  var csvId = getFileIdFromURL(setting.csvUrl);
   var file = DriveApp.getFileById(csvId);
-
   var data = file.getBlob().getDataAsString("Shift_JIS");
   var csv = Utilities.parseCsv(data);
 
-  //writeSpreadSheet
-  LogSheet.writeSheet("importCSV", csv);
+  //ログシートにCSV→スプレッドシートに変換した全データを書き込み、フォルダID、オーナーそれぞれ昇順で並び替える
+  logSheet.writeSheet("importCSV", csv);
+  logSheet.sortASC("importCSV", [1,9]);
 
-  //insertFolder and delete MyDrive
-  insertFolder.addFile(LogSheet.id);
-  rootFolder.removeFile(LogSheet.id);
+  var ownerAry = [];
+  ownerAry.push(csv[0]);
 
-  return csv;
+  //オーナーの行のみ抜き出したスプレッドシートも作成する
+  for(var i = 1; i < csv.length; i++){
+    var shareLevel = csv[i][8];
+    if(shareLevel === "オーナー"){
+      ownerAry.push(csv[i]);
+    }
+  }
+
+  //ログシートに書き込み、後オーナー順で並び替え
+  logSheet.writeSheet("ownerRow", ownerAry);
+  logSheet.sortASC("ownerRow", [1]);
+
+  //この処理が終わったらフォルダ内に入っている子ファイルの最終更新日を取得する処理に移る
+  getChildFileLastUpdate(setting, logSheet, timer, properties, ownerAry);
 }
 
+//入力されたURLからIDを取得して返す
 function getFileIdFromURL(_url_) {
   try {
     var url = new String(_url_);
