@@ -3,7 +3,7 @@
 function importCSV(){
 
   var logSheet = new LogSheet();
-  var setting = new SettingSheet()
+  var setting = new Setting();
   var timer = new Timer();
   var properties = new Property();
 
@@ -28,12 +28,12 @@ function importCSV(){
     }
   }
 
-  //ログシートに書き込み、後オーナー順で並び替え
+  //オーナーだけの行を抜き出したら、共有者の列で並び替える
   logSheet.writeSheet("ownerRow", ownerAry);
-  logSheet.sortASC("ownerRow", [1]);
-
+  logSheet.sortASC("ownerRow", [8]);
+  
   //この処理が終わったらフォルダ内に入っている子ファイルの最終更新日を取得する処理に移る
-  getChildFileLastUpdate(setting, logSheet, timer, properties, ownerAry);
+  getChildFileLastUpdate(setting, logSheet, timer, properties);
 }
 
 //入力されたURLからIDを取得して返す
