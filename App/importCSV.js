@@ -1,4 +1,3 @@
-
 //出力したCSVを読み込んでスプレッドシートに出力する
 function importCSV(){
 
@@ -12,6 +11,7 @@ function importCSV(){
   var file = DriveApp.getFileById(csvId);
   var data = file.getBlob().getDataAsString("Shift_JIS");
   var csv = Utilities.parseCsv(data);
+  csv.splice(0, 1);
 
   //ログシートにCSV→スプレッドシートに変換した全データを書き込み、フォルダID、オーナーそれぞれ昇順で並び替える
   logSheet.writeSheet("importCSV", csv);
