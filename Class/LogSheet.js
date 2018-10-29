@@ -1,7 +1,6 @@
-
 //ログシートの読み込み
 function LogSheet(){
-  this.id = "ログシートのIDを書き込む"
+  this.id = ""
   this.file = SpreadsheetApp.openById(this.id);
 }
 
@@ -17,7 +16,7 @@ LogSheet.prototype.readSheet = function(sheetName){
 
 //ログシート内の特定のシートにdataの情報を書き込む
 LogSheet.prototype.writeSheet = function(sheetName, data){
-  var writeSheet = this.file.getSheetByName(sheetName);
+  var writeSheet = this.file.getSheetByName(sheetName);  
   writeSheet.getRange(writeSheet.getLastRow()+1, 1, data.length, data[0].length).setValues(data);
 }
 
@@ -40,14 +39,15 @@ LogSheet.prototype.copyLogSheet = function(){
 
 LogSheet.prototype.clear = function(sheetName){
   var clearSheet = this.file.getSheetByName(sheetName);
-  clearSheet.clear();
+  var clearRange = clearSheet.getRange(2, 1, clearSheet.getLastRow(), clearSheet.getLastColumn());
+  clearRange.clear();
 }
 
 //JSON形式で読み込む
 LogSheet.prototype.readJSONSheet = function(sheetName){
   //UnderScoreのライブラリ使用前提
-  var _ = UnderScore.load();
-  var sheet = LogSheet.readSheet(sheetName);
+  var _ = Underscore.load();
+  var sheet =  this.readSheet(sheetName);
   var value = sheet.getRange(1, 1, sheet.getLastRow(), sheet.getLastColumn()).getValues();
   var keys = value.splice(0, 1)[0];
 
