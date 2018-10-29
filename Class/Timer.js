@@ -5,7 +5,7 @@ function Timer(){
   this.startTime = new Date().getTime();
   this.reStartMinute = 1;
 
-  var operatingTime = 20;
+  var operatingTime = 15;
 
   var startTime = new Date(this.startTime);
   this.limitTime = startTime.setMinutes(startTime.getMinutes() + operatingTime);
@@ -34,4 +34,14 @@ Timer.prototype.setTrigger = function(functionName, reStartRow){
 
   //プロパティにトリガーIDと再開値を保存する
   properties.setProperty(functionName, setPropertyBody);
+}
+
+//再起動用のトリガー削除する
+Timer.prototype.deleteTrigger = function(triggerId){
+  var triggers = ScriptApp.getProjectTriggers();
+  for(var i = 0; i < triggers.length; i++){
+    if(triggers[i].getUniqueId() === triggerId) {
+      ScriptApp.deleteTrigger(triggers[i]);
+    }
+  }
 }
