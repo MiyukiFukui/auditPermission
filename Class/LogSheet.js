@@ -16,8 +16,12 @@ LogSheet.prototype.readSheet = function(sheetName){
 
 //ログシート内の特定のシートにdataの情報を書き込む
 LogSheet.prototype.writeSheet = function(sheetName, data){
-  var writeSheet = this.file.getSheetByName(sheetName);  
-  writeSheet.getRange(writeSheet.getLastRow()+1, 1, data.length, data[0].length).setValues(data);
+  var writeSheet = this.file.getSheetByName(sheetName);
+
+  //dataが空なら書き込まない処理
+  if(data.length > 0){
+    writeSheet.getRange(writeSheet.getLastRow()+1, 1, data.length, data[0].length).setValues(data);
+  }
 }
 
 //指定した列番号順にスプレッドシートの中身を並び替える
