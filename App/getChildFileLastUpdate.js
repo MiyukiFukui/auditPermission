@@ -1,6 +1,6 @@
 //フォルダ内にある子ファイル/子フォルダの最終更新日を取得する
 function getChildFileLastUpdate(setting, logSheet, timer, properties){
-  
+
   //途中再開して実行している場合は、再度諸々の設定を読み込む
   if(!logSheet){
     setting = new Setting();
@@ -8,14 +8,14 @@ function getChildFileLastUpdate(setting, logSheet, timer, properties){
     timer = new Timer();
     properties = new Property();
   }
-  
+
   //プロパティ情報から情報の読み込み
   var AdminProperty = Admin.getAllProperty();
   var serviceAccount = JSON.parse(AdminProperty.getProperty("jsonkey"));
 
   var propertyName   = "getChildFileLastUpdate";
   var scriptProperty = JSON.parse(properties.getProperty(propertyName));
-  
+
   if(scriptProperty.triggerId !== null) timer.deleteTrigger(scriptProperty.triggerId);
 
   var childFileList = [];
@@ -75,6 +75,7 @@ function getChildFileLastUpdate(setting, logSheet, timer, properties){
     var childFileId = "";
     var childFileTitle = "";
     var childFileOwner = "";
+    var childType = ""
     var childFileModifitedDate = "";
 
     //中に子ファイルが入っていたらファイルの情報を取得する
@@ -87,6 +88,7 @@ function getChildFileLastUpdate(setting, logSheet, timer, properties){
         childFileId = childFileInfo.id;
         childFileTitle = childFileInfo.title;
         childFileOwner = childFileInfo.owners[0].emailAddress;
+        childType = childFileInfo.mimeType;
         childFileModifitedDate = childFileInfo.modifiedDate;
       }
     } catch(e){
@@ -94,7 +96,7 @@ function getChildFileLastUpdate(setting, logSheet, timer, properties){
     }
 
     childFileList.push([folderId, folderName, folderCreateDate, folderUpdateDate, shareUser, shareLevel, //　フォルダの情報
-      childFileId, childFileTitle, childFileOwner, childFileModifitedDate]);　//中に入っている子ファイルの情報
+      childFileId, childFileTitle, childFileOwner, childType, childFileModifitedDate]);　//中に入っている子ファイルの情報
   }
     //最終更新日を加えた結果を出力する
     logSheet.writeSheet("childFileLastUpdate", childFileList);

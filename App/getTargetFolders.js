@@ -47,7 +47,7 @@ function getTargetFolders(setting, logSheet, timer, properties){
 
     if(folderId === "") break;
 
-    var childFileLastUpdate = Utilities.formatDate(new Date(folderList[i][9]), "JST", "yyyy/MM/dd");
+    var childFileLastUpdate = Utilities.formatDate(new Date(folderList[i][10]), "JST", "yyyy/MM/dd");
     var lastUpdateGetTime = new Date(childFileLastUpdate).getTime();
 
     //子ファイルの最終更新日よりもチェックする対象の期限の方が後であれば、フォルダ権限を変更して良いフォルダであるとみなす
