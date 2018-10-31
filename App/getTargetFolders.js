@@ -76,7 +76,9 @@ function getTargetFolders(setting, logSheet, timer, properties){
     }
   }
   logSheet.writeSheet("targetFolders", targetFolders);
-
+  
+  properties.restoreProperty("getTargetFolders");
+  
   //フォルダ権限解除処理の実行
   executeFolerPermission(setting, logSheet, timer, properties)
 }

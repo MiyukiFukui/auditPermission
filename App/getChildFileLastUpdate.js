@@ -98,9 +98,11 @@ function getChildFileLastUpdate(setting, logSheet, timer, properties){
     childFileList.push([folderId, folderName, folderCreateDate, folderUpdateDate, shareUser, shareLevel, //　フォルダの情報
       childFileId, childFileTitle, childFileOwner, childType, childFileModifitedDate]);　//中に入っている子ファイルの情報
   }
-    //最終更新日を加えた結果を出力する
-    logSheet.writeSheet("childFileLastUpdate", childFileList);
-
-    //対象フォルダを取得する処理
-    getTargetFolders(setting, logSheet, timer, properties);
+  //最終更新日を加えた結果を出力する
+  logSheet.writeSheet("childFileLastUpdate", childFileList);
+  
+  properties.restoreProperty("getChildFileLastUpdate");
+  
+  //対象フォルダを取得する処理
+  getTargetFolders(setting, logSheet, timer, properties);
 }

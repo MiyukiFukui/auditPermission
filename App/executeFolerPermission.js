@@ -142,8 +142,9 @@ function executeFolerPermission(setting, logSheet, timer, properties) {
     if(shareUserInfo.userType === "user" && shareLevel === "reader"){
       insertExpirationDate(samePermissionFiles, shareUserInfo, driveService);
     }
-    
   }
+  
+  properties.restoreProperty("executeFolerPermission");
 
   console.log("処理が終了しました。");
 }
